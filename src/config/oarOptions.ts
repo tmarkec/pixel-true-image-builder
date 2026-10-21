@@ -75,6 +75,21 @@ export const CLUBS = [
   "University of Limerick RC", "Waterford BC", "Workmans BC",
 ];
 
+export const CONDITIONS = ["New", "Good", "Worn", "Damaged / for parts"] as const; // fixed in database
+
+export const OFFER_TYPES = ["Free", "Swap", "Price negotiable", "Fixed price"] as const; // fixed in database
+
+export const LISTING_STATUSES = ["active", "matched", "archived", "hidden"] as const; // fixed in database
+
+export const LISTING_DAYS = 60;
+
+export const COUNTIES = [
+  "Antrim", "Armagh", "Carlow", "Cavan", "Clare", "Cork", "Derry", "Donegal",
+  "Down", "Dublin", "Fermanagh", "Galway", "Kerry", "Kildare", "Kilkenny", "Laois",
+  "Leitrim", "Limerick", "Longford", "Louth", "Mayo", "Meath", "Monaghan", "Offaly",
+  "Roscommon", "Sligo", "Tipperary", "Tyrone", "Waterford", "Westmeath", "Wexford", "Wicklow",
+] as const;
+
 export const REPORT_REASONS = [
   "Already gone",
   "Wrong details",
