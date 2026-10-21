@@ -5,10 +5,11 @@ export function TypeBadge({ type }: { type: string }) {
   return (
     <span
       className={cn(
-        "inline-block rounded-sm px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-wide",
-        have ? "bg-have text-have-foreground" : "bg-want text-want-foreground",
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide",
+        have ? "bg-have-soft text-have-strong" : "bg-want-soft text-want-strong",
       )}
     >
+      <span className={cn("h-1.5 w-1.5 rounded-full", have ? "bg-have" : "bg-want")} aria-hidden />
       {have ? "Have" : "Want"}
     </span>
   );
