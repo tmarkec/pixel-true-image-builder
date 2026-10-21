@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 export function ListingDetailsDialog({ listing, onClose }: { listing: PublicListing | null; onClose: () => void }) {
   return (
     <Dialog open={!!listing} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-h-[92vh] overflow-y-auto border-2 border-navy p-0 sm:max-w-lg">
+      <DialogContent className="max-h-[92vh] overflow-y-auto border-2 border-navy p-0 sm:max-w-lg [&>button:last-child]:text-navy-foreground [&>button:last-child]:opacity-90">
         {listing && <ListingCard listing={listing} onClose={onClose} />}
       </DialogContent>
     </Dialog>
