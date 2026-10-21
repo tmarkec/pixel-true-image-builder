@@ -37,10 +37,14 @@
   --color-have-foreground: var(--have-foreground);
   --color-want: var(--want);
   --color-want-foreground: var(--want-foreground);
+  --color-have-soft: var(--have-soft);
+  --color-have-strong: var(--have-strong);
+  --color-want-soft: var(--want-soft);
+  --color-want-strong: var(--want-strong);
 }
 
 :root {
-  --radius: 0.375rem;
+  --radius: 0.625rem;
   /* white */
   --background: oklch(1 0 0);
   /* deep navy #0f172a */
@@ -67,12 +71,18 @@
   --border: oklch(0.869 0.022 252.894);
   --input: oklch(0.869 0.022 252.894);
   --ring: oklch(0.588 0.158 241.966);
-  /* emerald #10b981 bg with navy text for contrast */
-  --have: oklch(0.696 0.17 162.48);
-  --have-foreground: oklch(0.208 0.042 265.755);
-  /* blue #3b82f6 bg with white text */
-  --want: oklch(0.623 0.214 259.815);
+  /* Have: teal */
+  --have: oklch(0.7 0.13 182);
+  --have-foreground: oklch(1 0 0);
+  --have-soft: oklch(0.96 0.035 182);
+  --have-strong: oklch(0.45 0.09 185);
+  /* Want: warm coral */
+  --want: oklch(0.7 0.16 40);
   --want-foreground: oklch(1 0 0);
+  --want-soft: oklch(0.96 0.03 45);
+  --want-strong: oklch(0.52 0.15 38);
+  --shadow-soft: 0 1px 2px oklch(0.2 0.04 265 / 0.04), 0 8px 24px -8px oklch(0.2 0.04 265 / 0.1);
+  --hero-gradient: radial-gradient(60% 80% at 10% 0%, oklch(0.95 0.04 182 / 0.7), transparent 70%), radial-gradient(50% 70% at 90% 10%, oklch(0.95 0.03 45 / 0.6), transparent 70%), var(--surface);
 }
 
 @layer base {
@@ -88,4 +98,11 @@
     font-family: var(--font-display);
     letter-spacing: 0.01em;
   }
+}
+
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+@utility bg-hero {
+  background: var(--hero-gradient);
 }

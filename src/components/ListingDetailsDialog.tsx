@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 export function ListingDetailsDialog({ listing, onClose }: { listing: PublicListing | null; onClose: () => void }) {
   return (
     <Dialog open={!!listing} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-h-[92vh] overflow-y-auto border-2 border-navy p-0 sm:max-w-lg [&>button:last-child]:text-navy-foreground [&>button:last-child]:opacity-90">
+      <DialogContent className="max-h-[92vh] overflow-y-auto overflow-hidden rounded-2xl p-0 sm:max-w-lg [&>button:last-child]:text-navy-foreground [&>button:last-child]:opacity-90">
         {listing && <ListingCard listing={listing} onClose={onClose} />}
       </DialogContent>
     </Dialog>
@@ -48,36 +48,28 @@ export function ListingCard({ listing: l, onClose }: { listing: PublicListing; o
         </DialogDescription>
       </div>
 
-      {user ? <MemberView l={l} userId={user.id} onClose={onClose} /> : <GuestView l={l} />}
+      <DetailsView l={l} userId={user?.id ?? null} onClose={onClose} />
     </div>
   );
 }
 
 function Stat({ label, value }: { label: string; value: string | number | null | undefined }) {
   return (
-    <div className="border-l-4 border-primary bg-surface px-3 py-2">
+    <div className="rounded-lg bg-muted px-3 py-2">
       <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{label}</div>
       <div className="text-sm font-semibold">{value || "-"}</div>
     </div>
   );
 }
 
-function GuestView({ l }: { l: PublicListing }) {
+function LockedContact() {
   return (
-    <div className="space-y-4 p-5">
-      <div className="grid grid-cols-2 gap-2">
-        <Stat label="Brand" value={l.brand} />
-        <Stat label="Quantity" value={l.quantity} />
-        <Stat label="Discipline and side" value={`${l.discipline} · ${sideLabel(l.side)}`} />
-        <Stat label="County" value={l.county} />
-      </div>
-      <div className="rounded-md border-2 border-dashed p-5 text-center">
-        <Lock className="mx-auto h-6 w-6 text-muted-foreground" aria-hidden />
-        <p className="mt-2 text-sm">Contact details are only shown to logged-in members. Log in or sign up to see them.</p>
-        <div className="mt-4 flex justify-center gap-2">
-          <Button asChild size="sm"><Link to="/login">Log in</Link></Button>
-          <Button asChild size="sm" variant="outline"><Link to="/signup">Sign up</Link></Button>
-        </div>
+    <div className="rounded-xl border border-dashed p-5 text-center">
+      <Lock className="mx-auto h-5 w-5 text-muted-foreground" aria-hidden />
+      <p className="mt-2 text-sm">Contact details are only shown to logged-in members. Log in or sign up to see them.</p>
+      <div className="mt-4 flex justify-center gap-2">
+        <Button asChild size="sm"><Link to="/login">Log in</Link></Button>
+        <Button asChild size="sm" variant="outline"><Link to="/signup">Sign up</Link></Button>
       </div>
     </div>
   );
@@ -85,7 +77,7 @@ function GuestView({ l }: { l: PublicListing }) {
 
 function OarPlaceholder({ brand }: { brand: string }) {
   const theme =
-    brand === "Concept2" ? "bg-primary text-primary-foreground" : brand === "Croker" ? "bg-have text-have-foreground" : "bg-muted text-foreground";
+    brand === "Concept2" ? "bg-primary text-primary-foreground" : brand === "Croker" ? "bg-have text-have-foreground" : "bg-navy text-navy-foreground";
   return (
     <div className={cn("relative flex aspect-[16/7] items-center justify-center overflow-hidden", theme)}>
       <svg viewBox="0 0 200 60" className="absolute w-[85%] opacity-30" aria-hidden>
@@ -98,10 +90,12 @@ function OarPlaceholder({ brand }: { brand: string }) {
   );
 }
 
-function MemberView({ l, userId, onClose }: { l: PublicListing; userId: string; onClose?: (() => void) | undefined }) {
+function DetailsView({ l, userId, onClose }: { l: PublicListing; userId: string | null; onClose?: (() => void) | undefined }) {
   const { data: isOwner } = useQuery({
     queryKey: ["listing-owner", l.id, userId],
+    enabled: !!userId,
     queryFn: async () => {
+      if (!userId) return false;
       const { data } = await supabase.from("listings").select("id").eq("id", l.id).eq("user_id", userId).maybeSingle();
       return !!data;
     },
@@ -135,9 +129,18 @@ function MemberView({ l, userId, onClose }: { l: PublicListing; userId: string; 
           {l.pickup_event && <div className="mt-1 text-muted-foreground">Pickup: {l.pickup_event}</div>}
         </div>
 
-        {isOwner === undefined ? null : isOwner ? <OwnerActions id={l.id} onClose={onClose} /> : <ContactBox l={l} />}
+        {!userId ? (
+          <>
+            {l.notes && <p className="text-sm text-muted-foreground">{l.notes}</p>}
+            <LockedContact />
+          </>
+        ) : isOwner === undefined ? null : isOwner ? (
+          <OwnerActions id={l.id} onClose={onClose} />
+        ) : (
+          <ContactBox l={l} />
+        )}
 
-        {isOwner === false && <ReportLink listingId={l.id} userId={userId} />}
+        {userId && isOwner === false && <ReportLink listingId={l.id} userId={userId} />}
       </div>
     </>
   );
@@ -153,7 +156,7 @@ function ContactBox({ l }: { l: PublicListing }) {
     },
   });
   return (
-    <div className="rounded-md border-2 border-navy p-4">
+    <div className="rounded-xl border p-4">
       <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Contact</div>
       {isLoading ? (
         <p className="mt-2 text-sm text-muted-foreground">Loading</p>
@@ -192,7 +195,7 @@ function OwnerActions({ id, onClose }: { id: string; onClose?: (() => void) | un
     onClose ? onClose() : router.navigate({ to: "/" });
   };
   return (
-    <div className="rounded-md border-2 border-navy p-4">
+    <div className="rounded-xl border p-4">
       <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">This is your listing</div>
       <div className="mt-3 flex gap-2">
         <Button asChild size="sm" variant="outline"><Link to="/my-listings">Edit</Link></Button>
