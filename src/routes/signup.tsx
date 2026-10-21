@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MagicLinkForm } from "@/components/MagicLinkForm";
+import { AuthForm } from "@/components/AuthForm";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({
@@ -14,9 +14,9 @@ export const Route = createFileRoute("/signup")({
     <div className="mx-auto w-full max-w-md px-4 py-12">
       <h1 className="text-4xl font-bold">Sign up</h1>
       <p className="mt-2 mb-6 text-muted-foreground">
-        Enter your email and we'll send a link to confirm your account.
+        Choose a password. We'll email you a link once to confirm your account.
       </p>
-      <MagicLinkForm mode="signup" />
+      <AuthForm mode="signup" />
     </div>
   ),
 });
