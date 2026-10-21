@@ -14,7 +14,148 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      listing_contacts: {
+        Row: {
+          email: string
+          listing_id: string
+          phone: string | null
+        }
+        Insert: {
+          email: string
+          listing_id: string
+          phone?: string | null
+        }
+        Update: {
+          email?: string
+          listing_id?: string
+          phone?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_contacts_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: true
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listings: {
+        Row: {
+          blade_type: string | null
+          brand: string
+          club_name: string | null
+          condition: string | null
+          county: string
+          created_at: string
+          discipline: string
+          expires_at: string
+          grip_type: string | null
+          handle_type: string | null
+          id: string
+          image_url: string | null
+          length: string | null
+          listing_type: string
+          notes: string | null
+          offer_type: string | null
+          pickup_event: string | null
+          quantity: number
+          shaft_softness: string | null
+          shaft_type: string | null
+          side: string
+          sleeve_type: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          blade_type?: string | null
+          brand: string
+          club_name?: string | null
+          condition?: string | null
+          county: string
+          created_at?: string
+          discipline: string
+          expires_at?: string
+          grip_type?: string | null
+          handle_type?: string | null
+          id?: string
+          image_url?: string | null
+          length?: string | null
+          listing_type: string
+          notes?: string | null
+          offer_type?: string | null
+          pickup_event?: string | null
+          quantity?: number
+          shaft_softness?: string | null
+          shaft_type?: string | null
+          side: string
+          sleeve_type?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          blade_type?: string | null
+          brand?: string
+          club_name?: string | null
+          condition?: string | null
+          county?: string
+          created_at?: string
+          discipline?: string
+          expires_at?: string
+          grip_type?: string | null
+          handle_type?: string | null
+          id?: string
+          image_url?: string | null
+          length?: string | null
+          listing_type?: string
+          notes?: string | null
+          offer_type?: string | null
+          pickup_event?: string | null
+          quantity?: number
+          shaft_softness?: string | null
+          shaft_type?: string | null
+          side?: string
+          sleeve_type?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          created_at: string
+          id: string
+          listing_id: string
+          reason: string
+          reporter_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          listing_id: string
+          reason: string
+          reporter_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          listing_id?: string
+          reason?: string
+          reporter_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
