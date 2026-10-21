@@ -16,6 +16,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AuthenticatedMyListingsRouteImport } from './routes/_authenticated/my-listings'
+import { Route as ListingsIdRouteImport } from './routes/listings.$id'
 import { Route as AuthenticatedListingsNewRouteImport } from './routes/_authenticated/listings.new'
 
 const IndexRoute = IndexRouteImport.update({
@@ -52,6 +53,11 @@ const AuthenticatedMyListingsRoute = AuthenticatedMyListingsRouteImport.update({
   path: '/my-listings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ListingsIdRoute = ListingsIdRouteImport.update({
+  id: '/listings/$id',
+  path: '/listings/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedListingsNewRoute =
   AuthenticatedListingsNewRouteImport.update({
     id: '/listings/new',
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/signup': typeof SignupRoute
   '/my-listings': typeof AuthenticatedMyListingsRoute
+  '/listings/$id': typeof ListingsIdRoute
   '/listings/new': typeof AuthenticatedListingsNewRoute
 }
 export interface FileRoutesByTo {
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/signup': typeof SignupRoute
   '/my-listings': typeof AuthenticatedMyListingsRoute
+  '/listings/$id': typeof ListingsIdRoute
   '/listings/new': typeof AuthenticatedListingsNewRoute
 }
 export interface FileRoutesById {
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/signup': typeof SignupRoute
   '/_authenticated/my-listings': typeof AuthenticatedMyListingsRoute
+  '/listings/$id': typeof ListingsIdRoute
   '/_authenticated/listings/new': typeof AuthenticatedListingsNewRoute
 }
 export interface FileRouteTypes {
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/signup'
     | '/my-listings'
+    | '/listings/$id'
     | '/listings/new'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/signup'
     | '/my-listings'
+    | '/listings/$id'
     | '/listings/new'
   id:
     | '__root__'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/signup'
     | '/_authenticated/my-listings'
+    | '/listings/$id'
     | '/_authenticated/listings/new'
   fileRoutesById: FileRoutesById
 }
@@ -126,6 +138,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
   SignupRoute: typeof SignupRoute
+  ListingsIdRoute: typeof ListingsIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -179,6 +192,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMyListingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/listings/$id': {
+      id: '/listings/$id'
+      path: '/listings/$id'
+      fullPath: '/listings/$id'
+      preLoaderRoute: typeof ListingsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/listings/new': {
       id: '/_authenticated/listings/new'
       path: '/listings/new'
@@ -209,6 +229,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,
   SignupRoute: SignupRoute,
+  ListingsIdRoute: ListingsIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
