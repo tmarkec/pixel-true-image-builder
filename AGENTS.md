@@ -14,4 +14,4 @@
 - Contact details live only in listing_contacts (logged-in read); never add contact columns to listings, which is publicly readable.
 - listing_contacts.email is set by DB triggers from the owner's account email; client code must never write it.
 - App tables store user_id as plain uuid (no FK to auth.users); account deletion cleanup is done by a trigger.
-- Auth is email magic link only (signInWithOtp); protected pages live under src/routes/_authenticated/.
+- Auth is email and password (signUp / signInWithPassword), no magic links; protected pages live under src/routes/_authenticated/.
