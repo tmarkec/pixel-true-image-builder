@@ -3,14 +3,14 @@ import { supabase } from "@/integrations/supabase/client";
 
 // Public columns only. Contact details are never fetched here.
 const PUBLIC_COLUMNS =
-  "id, listing_type, brand, discipline, side, quantity, blade_type, shaft_type, shaft_softness, handle_type, grip_type, length, condition, offer_type, county, club_name, pickup_event, image_url, notes, status, expires_at, created_at, updated_at";
+  "id, listing_type, brand, discipline, side, quantity, blade_type, shaft_type, shaft_softness, handle_type, sleeve_type, grip_type, length, condition, offer_type, county, club_name, pickup_event, image_url, notes, status, expires_at, created_at, updated_at";
 
 export type ListingFilters = {
-  type: string;
-  brand: string;
-  discipline: string;
-  side: string;
-  county: string;
+  type?: string;
+  brand?: string;
+  discipline?: string;
+  side?: string;
+  county?: string;
 };
 
 export const listingsQuery = (f: ListingFilters) =>

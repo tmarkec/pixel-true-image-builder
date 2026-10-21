@@ -10,7 +10,7 @@ import { TypeBadge } from "@/components/TypeBadge";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 
-const str = (v: unknown) => (typeof v === "string" ? v : "");
+const str = (v: unknown) => (typeof v === "string" && v ? v : undefined);
 
 export const Route = createFileRoute("/")({
   validateSearch: (s: Record<string, unknown>): ListingFilters => ({
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/")({
     ],
   }),
   component: Index,
-  errorComponent: ({ error }) => <div role="alert" className="p-8">{error.message}</div>,
+  errorComponent: ({ error }) => <div role="alert" className="p-8">{error instanceof Error ? error.message : String(error)}</div>,
   notFoundComponent: () => <div className="p-8">Not found.</div>,
 });
 
@@ -40,8 +40,8 @@ function Index() {
   const navigate = useNavigate({ from: "/" });
   const { data } = useSuspenseQuery(listingsQuery(search));
   const { user, loading } = useAuth();
-  const set = (k: keyof ListingFilters, v: string) =>
-    navigate({ search: (p) => ({ ...p, [k]: v }), replace: true, resetScroll: false });
+  const set = (k: keyof ListingFilters, v: string | undefined) =>
+    navigate({ search: (p) => ({ ...p, [k]: v || undefined }), replace: true, resetScroll: false });
   const anyFilter = Object.values(search).some(Boolean);
 
   return (
@@ -69,7 +69,7 @@ function Index() {
                 key={o.v}
                 type="button"
                 aria-pressed={on}
-                onClick={() => set("type", on ? "" : o.v)}
+                onClick={() => set("type", on ? undefined : o.v)}
                 className={cn(
                   "flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold transition-colors",
                   on ? "bg-navy text-navy-foreground" : "text-foreground hover:bg-muted",
@@ -83,15 +83,15 @@ function Index() {
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
-          <FilterSelect label="Brand" value={search.brand} options={BRANDS} onChange={(v) => set("brand", v)} />
-          <FilterSelect label="Discipline" value={search.discipline} options={DISCIPLINES} onChange={(v) => set("discipline", v)} />
-          <FilterSelect label="Side" value={search.side} options={SIDES} onChange={(v) => set("side", v)} format={sideLabel} />
-          <FilterSelect label="County" value={search.county} options={COUNTIES} onChange={(v) => set("county", v)} />
+          <FilterSelect label="Brand" value={search.brand ?? ""} options={BRANDS} onChange={(v) => set("brand", v)} />
+          <FilterSelect label="Discipline" value={search.discipline ?? ""} options={DISCIPLINES} onChange={(v) => set("discipline", v)} />
+          <FilterSelect label="Side" value={search.side ?? ""} options={SIDES} onChange={(v) => set("side", v)} format={sideLabel} />
+          <FilterSelect label="County" value={search.county ?? ""} options={COUNTIES} onChange={(v) => set("county", v)} />
           <Button
             variant="ghost"
             size="sm"
             disabled={!anyFilter}
-            onClick={() => navigate({ search: { type: "", brand: "", discipline: "", side: "", county: "" }, replace: true, resetScroll: false })}
+            onClick={() => navigate({ search: {}, replace: true, resetScroll: false })}
           >
             Clear filters
           </Button>

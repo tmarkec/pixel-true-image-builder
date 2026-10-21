@@ -25,7 +25,7 @@ export const Route = createFileRoute("/listings/$id")({
     };
   },
   component: ListingPage,
-  errorComponent: ({ error }) => <div role="alert" className="p-8">{error.message}</div>,
+  errorComponent: ({ error }) => <div role="alert" className="p-8">{error instanceof Error ? error.message : String(error)}</div>,
   notFoundComponent: () => (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <h1 className="text-3xl font-bold">Listing not found</h1>
