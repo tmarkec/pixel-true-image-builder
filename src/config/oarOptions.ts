@@ -15,35 +15,65 @@ export const SIDES = ["Bow", "Stroke", "Unspecified / Either"] as const; // fixe
 export const QUANTITY_MIN = 1;
 export const QUANTITY_MAX = 16; // fixed in database
 
-export const BLADE_TYPES = [
-  "Smoothie2 Vortex Edge",
-  "Smoothie2 Plain Edge",
-  "Big Blade",
-  "Fat2",
-  "Comp",
-  "Macon",
-  "Other",
-] as const;
+export const QUANTITY_PRESETS = [1, 2, 4, 8] as const;
 
-export const SHAFT_TYPES = ["Skinny", "Ultralight", "Standard", "Wood", "Other"] as const;
+// Spec dropdowns change with the brand. Edit freely; these are not fixed in the database.
+// sleeve: Croker only. grip: Croker grip/handle. handle: Concept2 / Other handle.
+// length: null means free-text length.
+export type BrandSpecs = {
+  blade: readonly string[];
+  shaft?: readonly string[];
+  sleeve?: readonly string[];
+  handle?: readonly string[];
+  grip?: readonly string[];
+  softness?: readonly string[];
+  length: readonly string[] | null;
+};
 
-export const SHAFT_SOFTNESS = ["Soft", "Medium", "Stiff", "Not sure"] as const;
+export const BRAND_SPECS: Record<string, BrandSpecs> = {
+  Concept2: {
+    blade: [
+      "Macon (1976/1980)", "Big (1991)", "Smoothie1 (1996)", "Fat2 (2004)", "Smoothie2 Plain (2006)",
+      "Smoothie2 Vortex (2006)", "Bantam (2015)", "Comp (2019)", "Unknown / Other",
+    ],
+    shaft: ["Ultralight (1997)", "Low-i (2004)", "Skinny (2011)", "Skinny Coastal", "Blade only", "Unknown"],
+    handle: ["10cm Adjustable (1995)", "5cm Adjustable (2005)", "Fixed (Wood/Alloy/Composite)", "Blade only", "Unknown"],
+    softness: ["Extra soft", "Soft", "Medium", "Stiff", "Unknown"],
+    length: [
+      "Fat Short (275-280cm)", "Fat Medium (278-283cm)", "Short (281-286cm)", "Medium (284-289cm)",
+      "Long (287-292cm)", "Blade only",
+    ],
+  },
+  Croker: {
+    blade: [
+      "Macon (1990)", "Cleaver (1992)", "Droop Snoot (1997)", "Slick (2002)", "Slick Round (2010)",
+      "Arrow (2015)", "Unknown / Other",
+    ],
+    sleeve: ["MK1 Sleeve (1992)", "MK3 Sleeve (2005)", "MK4 Sleeve (2022)", "No sleeve", "Unknown"],
+    grip: [
+      "Pink - Small (31mm)", "Yellow - Intermediate (34mm)", "Blue - Standard (35mm)", "Grey - Large (37mm)",
+      "Green - Extra-Large (39mm)", "Fixed wood", "Unknown / Missing grip",
+    ],
+    softness: ["Soft", "Medium", "Stiff", "Unknown"],
+    length: ["Standard scull/sweep lengths", "Custom", "Blade only", "Unknown"],
+  },
+  Other: {
+    blade: ["Hatchet / cleaver", "Macon", "Wooden", "Unknown"],
+    shaft: ["Carbon", "Wood", "Aluminium", "Unknown"],
+    handle: ["Adjustable", "Fixed", "Unknown"],
+    length: null,
+  },
+};
 
-export const SLEEVE_TYPES = ["Plastic", "Composite", "Wood", "Other"] as const;
-
-export const HANDLE_TYPES = ["Adjustable", "Fixed"] as const;
-
-export const GRIP_TYPES = ["Rubber", "Wood", "Foam", "Other"] as const;
-
-export const LENGTHS = [
-  "Under 280cm",
-  "280-289cm",
-  "290-299cm",
-  "360-369cm",
-  "370-379cm",
-  "380cm and over",
-  "Not sure",
-] as const;
+// Irish rowing clubs for the club picker. People can also type their own.
+export const CLUBS = [
+  "Athlone BC", "Bann RC", "Belfast BC", "Bush RC", "Carlow RC", "Castleconnell BC", "Clonmel RC",
+  "Commercial RC", "Cork BC", "DCU", "Dublin University BC (Trinity)", "Fermoy RC", "Galway RC",
+  "Lady Elizabeth BC", "Lee RC", "Limerick BC", "Methodist College", "Muckross RC",
+  "Neptune RC", "NUIG BC", "Old Collegians BC", "Portora BC", "Presentation College Cork", "Queen's University BC",
+  "Shandon BC", "Skibbereen RC", "St. Michael's RC", "Three Castles BC", "Tribesmen RC", "UCC RC", "UCD BC",
+  "University of Limerick RC", "Waterford BC", "Workmans BC",
+];
 
 export const CONDITIONS = ["New", "Good", "Worn", "Damaged / for parts"] as const; // fixed in database
 
