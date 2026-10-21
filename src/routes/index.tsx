@@ -8,6 +8,7 @@ import { BRANDS, DISCIPLINES, SIDES, COUNTIES } from "@/config/oarOptions";
 import { listingsQuery, relativeTime, sideLabel, type ListingFilters } from "@/lib/listings";
 import { TypeBadge } from "@/components/TypeBadge";
 import { useAuth } from "@/hooks/useAuth";
+import { ListingDetailsDialog } from "@/components/ListingDetailsDialog";
 import { cn } from "@/lib/utils";
 
 const str = (v: unknown) => (typeof v === "string" && v ? v : undefined);
@@ -40,6 +41,7 @@ function Index() {
   const navigate = useNavigate({ from: "/" });
   const { data } = useSuspenseQuery(listingsQuery(search));
   const { user, loading } = useAuth();
+  const [viewing, setViewing] = useState<Row | null>(null);
   const set = (k: keyof ListingFilters, v: string | undefined) =>
     navigate({ search: (p) => ({ ...p, [k]: v || undefined }), replace: true, resetScroll: false });
   const anyFilter = Object.values(search).some(Boolean);
@@ -104,9 +106,9 @@ function Index() {
             </p>
           ) : (
             <>
-              <DesktopTable rows={data} />
+              <DesktopTable rows={data} onView={setViewing} />
               <div className="space-y-2 md:hidden">
-                {data.map((r) => <MobileCard key={r.id} r={r} />)}
+                {data.map((r) => <MobileCard key={r.id} r={r} onView={setViewing} />)}
               </div>
             </>
           )}
@@ -120,6 +122,7 @@ function Index() {
           </div>
         )}
       </section>
+      <ListingDetailsDialog listing={viewing} onClose={() => setViewing(null)} />
     </>
   );
 }
@@ -143,7 +146,7 @@ function FilterSelect({
 const dash = (v: string | null | undefined) => v || "-";
 const handleGrip = (r: Row) => [r.handle_type, r.grip_type].filter(Boolean).join(" / ") || "-";
 
-function DesktopTable({ rows }: { rows: Row[] }) {
+function DesktopTable({ rows, onView }: { rows: Row[]; onView: (r: Row) => void }) {
   const heads = ["Type", "Qty", "Brand", "Discipline", "Side", "Blade", "Shaft", "Softness", "Handle / grip", "Length", "County", "Updated", ""];
   return (
     <div className="hidden max-h-[70vh] overflow-auto rounded-md border md:block">
@@ -167,9 +170,7 @@ function DesktopTable({ rows }: { rows: Row[] }) {
               <td className="px-2 py-1.5">{r.county}</td>
               <td className="whitespace-nowrap px-2 py-1.5 text-muted-foreground">{relativeTime(r.updated_at)}</td>
               <td className="px-2 py-1.5">
-                <Button asChild size="sm" variant="outline" className="h-7">
-                  <Link to="/listings/$id" params={{ id: r.id }}>View details</Link>
-                </Button>
+                <Button size="sm" variant="outline" className="h-7" onClick={() => onView(r)}>View details</Button>
               </td>
             </tr>
           ))}
@@ -179,7 +180,7 @@ function DesktopTable({ rows }: { rows: Row[] }) {
   );
 }
 
-function MobileCard({ r }: { r: Row }) {
+function MobileCard({ r, onView }: { r: Row; onView: (r: Row) => void }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="rounded-md border">
@@ -199,9 +200,7 @@ function MobileCard({ r }: { r: Row }) {
         </dl>
       )}
       <div className="border-t p-2">
-        <Button asChild size="sm" variant="outline" className="w-full">
-          <Link to="/listings/$id" params={{ id: r.id }}>View details</Link>
-        </Button>
+        <Button size="sm" variant="outline" className="w-full" onClick={() => onView(r)}>View details</Button>
       </div>
     </div>
   );
