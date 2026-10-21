@@ -23,7 +23,7 @@ export function ListingDetailsDialog({ listing, onClose }: { listing: PublicList
   );
 }
 
-export function ListingCard({ listing: l, onClose }: { listing: PublicListing; onClose?: () => void }) {
+export function ListingCard({ listing: l, onClose }: { listing: PublicListing; onClose?: (() => void) | undefined }) {
   const { user, loading } = useAuth();
   const title = `${l.brand} ${l.discipline.toLowerCase()} oar${l.quantity > 1 ? "s" : ""}`;
 
@@ -98,7 +98,7 @@ function OarPlaceholder({ brand }: { brand: string }) {
   );
 }
 
-function MemberView({ l, userId, onClose }: { l: PublicListing; userId: string; onClose?: () => void }) {
+function MemberView({ l, userId, onClose }: { l: PublicListing; userId: string; onClose?: (() => void) | undefined }) {
   const { data: isOwner } = useQuery({
     queryKey: ["listing-owner", l.id, userId],
     queryFn: async () => {
@@ -177,7 +177,7 @@ function ContactBox({ l }: { l: PublicListing }) {
   );
 }
 
-function OwnerActions({ id, onClose }: { id: string; onClose?: () => void }) {
+function OwnerActions({ id, onClose }: { id: string; onClose?: (() => void) | undefined }) {
   const qc = useQueryClient();
   const router = useRouter();
   const [confirm, setConfirm] = useState(false);
@@ -186,7 +186,7 @@ function OwnerActions({ id, onClose }: { id: string; onClose?: () => void }) {
     setBusy(true);
     const { error } = await supabase.from("listings").delete().eq("id", id);
     setBusy(false);
-    if (error) return toast.error("Could not delete the listing. Try again.");
+    if (error) { toast.error("Could not delete the listing. Try again."); return; }
     toast.success("Listing deleted.");
     await qc.invalidateQueries({ queryKey: ["listings"] });
     onClose ? onClose() : router.navigate({ to: "/" });
@@ -229,7 +229,7 @@ function ReportLink({ listingId, userId }: { listingId: string; userId: string }
     const text = detail.trim() ? `${reason}: ${detail.trim().slice(0, 500)}` : reason;
     const { error } = await supabase.from("reports").insert({ listing_id: listingId, reporter_id: userId, reason: text });
     setBusy(false);
-    if (error) return toast.error("Could not send the report. Try again.");
+    if (error) { toast.error("Could not send the report. Try again."); return; }
     setSent(true);
   };
 
