@@ -62,3 +62,5 @@ export function relativeTime(iso: string, now = Date.now()) {
 export function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-GB");
 }
+
+export type PublicListing = Awaited<ReturnType<NonNullable<ReturnType<typeof listingsQuery>["queryFn"]>>>[number];
