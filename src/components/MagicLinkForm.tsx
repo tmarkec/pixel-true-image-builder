@@ -33,10 +33,9 @@ export function MagicLinkForm({ mode }: { mode: "login" | "signup" }) {
       options: {
         emailRedirectTo: window.location.origin,
         shouldCreateUser: mode === "signup",
-        data:
-          mode === "signup"
-            ? { age_or_permission_confirmed: true, confirmed_at: new Date().toISOString() }
-            : undefined,
+        ...(mode === "signup"
+          ? { data: { age_or_permission_confirmed: true, confirmed_at: new Date().toISOString() } }
+          : {}),
       },
     });
     setBusy(false);
