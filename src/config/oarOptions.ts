@@ -69,7 +69,7 @@ export const BRAND_SPECS: Record<string, BrandSpecs> = {
 export const CLUBS = [
   "Athlone BC", "Bann RC", "Belfast BC", "Bush RC", "Carlow RC", "Castleconnell BC", "Clonmel RC",
   "Commercial RC", "Cork BC", "DCU", "Dublin University BC (Trinity)", "Fermoy RC", "Galway RC",
-  "Galway Rowing Club", "Lady Elizabeth BC", "Lee RC", "Limerick BC", "Methodist College", "Muckross RC",
+  "Lady Elizabeth BC", "Lee RC", "Limerick BC", "Methodist College", "Muckross RC",
   "Neptune RC", "NUIG BC", "Old Collegians BC", "Portora BC", "Presentation College Cork", "Queen's University BC",
   "Shandon BC", "Skibbereen RC", "St. Michael's RC", "Three Castles BC", "Tribesmen RC", "UCC RC", "UCD BC",
   "University of Limerick RC", "Waterford BC", "Workmans BC",
