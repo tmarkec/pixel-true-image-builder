@@ -6,11 +6,11 @@ const PUBLIC_COLUMNS =
   "id, listing_type, brand, discipline, side, quantity, blade_type, shaft_type, shaft_softness, handle_type, sleeve_type, grip_type, length, condition, offer_type, county, club_name, pickup_event, image_url, notes, status, expires_at, created_at, updated_at";
 
 export type ListingFilters = {
-  type?: string;
-  brand?: string;
-  discipline?: string;
-  side?: string;
-  county?: string;
+  type?: string | undefined;
+  brand?: string | undefined;
+  discipline?: string | undefined;
+  side?: string | undefined;
+  county?: string | undefined;
 };
 
 export const listingsQuery = (f: ListingFilters) =>

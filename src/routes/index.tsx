@@ -14,7 +14,7 @@ const str = (v: unknown) => (typeof v === "string" && v ? v : undefined);
 
 export const Route = createFileRoute("/")({
   validateSearch: (s: Record<string, unknown>): ListingFilters => ({
-    type: str(s.type), brand: str(s.brand), discipline: str(s.discipline), side: str(s.side), county: str(s.county),
+    type: str(s['type']), brand: str(s['brand']), discipline: str(s['discipline']), side: str(s['side']), county: str(s['county']),
   }),
   loaderDeps: ({ search }) => search,
   loader: ({ context, deps }) => context.queryClient.ensureQueryData(listingsQuery(deps)),
@@ -140,7 +140,7 @@ function FilterSelect({
   );
 }
 
-const dash = (v: string | null) => v || "-";
+const dash = (v: string | null | undefined) => v || "-";
 const handleGrip = (r: Row) => [r.handle_type, r.grip_type].filter(Boolean).join(" / ") || "-";
 
 function DesktopTable({ rows }: { rows: Row[] }) {
