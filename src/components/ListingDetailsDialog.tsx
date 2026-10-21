@@ -198,7 +198,7 @@ function OwnerActions({ id, onClose }: { id: string; onClose?: (() => void) | un
     <div className="rounded-xl border p-4">
       <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">This is your listing</div>
       <div className="mt-3 flex gap-2">
-        <Button asChild size="sm" variant="outline"><Link to="/my-listings">Edit</Link></Button>
+        <Button asChild size="sm" variant="outline"><Link to="/listings/$id/edit" params={{ id: l.id }}>Edit</Link></Button>
         {confirm ? (
           <>
             <Button size="sm" variant="destructive" disabled={busy} onClick={del}>Yes, delete</Button>
