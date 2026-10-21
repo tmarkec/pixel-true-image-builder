@@ -1,24 +1,38 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "OarExchange Ireland | Spare and missing oars" },
+      { name: "description", content: "A free noticeboard where Irish rowing clubs, schools and rowers list spare oars or look for missing ones." },
+      { property: "og:title", content: "OarExchange Ireland" },
+      { property: "og:description", content: "List spare oars or find the ones you need to complete a pair or set." },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <section className="bg-surface">
+      <div className="mx-auto max-w-6xl px-4 py-20">
+        <div className="flex gap-2">
+          <span className="rounded-sm bg-have px-2 py-0.5 text-xs font-bold uppercase text-have-foreground">Have</span>
+          <span className="rounded-sm bg-want px-2 py-0.5 text-xs font-bold uppercase text-want-foreground">Want</span>
+        </div>
+        <h1 className="mt-4 max-w-3xl text-5xl font-bold uppercase leading-none sm:text-7xl">
+          Find the oar that completes your set
+        </h1>
+        <p className="mt-6 max-w-xl text-lg text-muted-foreground">
+          A free noticeboard for Irish clubs, schools and rowers. List the oars you have spare, or post
+          the ones you're missing.
+        </p>
+        <div className="mt-8 flex gap-3">
+          <Button asChild size="lg"><Link to="/signup">Sign up</Link></Button>
+          <Button asChild size="lg" variant="outline"><Link to="/about">How it works</Link></Button>
+        </div>
+      </div>
+    </section>
   );
 }
