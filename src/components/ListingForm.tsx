@@ -76,7 +76,7 @@ export function ListingForm({ initial, listingId }: { initial?: ListingFormValue
   const navigate = useNavigate();
   const qc = useQueryClient();
   const [v, setV] = useState<ListingFormValues>(initial ?? EMPTY_LISTING);
-  const [errors, setErrors] = useState<Partial<Record<keyof ListingFormValues, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof ListingFormValues, string | undefined>>>({});
   const [open, setOpen] = useState<string[]>(["where", "oar", "photo"]);
   const [customQty, setCustomQty] = useState(!QUANTITY_PRESETS.includes((initial?.quantity ?? 1) as 1));
   const [file, setFile] = useState<File | null>(null);
