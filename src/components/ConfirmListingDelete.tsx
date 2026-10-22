@@ -1,0 +1,6 @@
+import { Button } from "@/components/ui/button";
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel } from "@/components/ui/alert-dialog";
+
+export function ConfirmListingDelete({ open, onOpenChange, onConfirm, busy }: { open: boolean; onOpenChange: (open: boolean) => void; onConfirm: () => void; busy: boolean }) {
+  return <AlertDialog open={open} onOpenChange={onOpenChange}><AlertDialogContent className="max-w-[calc(100%-2rem)] sm:max-w-md"><AlertDialogHeader><AlertDialogTitle>Delete this listing?</AlertDialogTitle><AlertDialogDescription>The listing and its reports will be removed. This cannot be undone.</AlertDialogDescription></AlertDialogHeader><AlertDialogFooter><AlertDialogCancel disabled={busy}>Cancel</AlertDialogCancel><Button variant="destructive" disabled={busy} onClick={onConfirm}>{busy ? "Deleting..." : "Delete listing"}</Button></AlertDialogFooter></AlertDialogContent></AlertDialog>;
+}
