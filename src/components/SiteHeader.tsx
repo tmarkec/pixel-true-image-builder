@@ -43,6 +43,9 @@ export function SiteHeader() {
         <nav className="flex items-center gap-2">
           {loading ? null : user ? (
             <>
+              <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+                <Link to="/" activeOptions={{ exact: true }}>Browse oars</Link>
+              </Button>
               <Button asChild size="sm">
                 <Link to="/listings/new">
                   <Plus className="h-4 w-4 shrink-0" /><span className="hidden sm:inline">List an oar</span><span className="sm:hidden">List</span>
@@ -62,6 +65,9 @@ export function SiteHeader() {
                     {user.email}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild className="sm:hidden">
+                    <Link to="/">Browse oars</Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem asChild className="sm:hidden">
                     <Link to="/my-listings">My listings</Link>
                   </DropdownMenuItem>
@@ -94,6 +100,7 @@ export function SiteFooter() {
     <footer className="mt-auto border-t bg-surface">
       <div className="mx-auto flex max-w-6xl flex-wrap gap-4 px-4 py-6 text-sm text-muted-foreground">
         <span>OarExchange Ireland is free to use.</span>
+        <Link to="/" className="hover:text-foreground">Browse oars</Link>
         <Link to="/about" className="hover:text-foreground">About</Link>
         <Link to="/privacy" className="hover:text-foreground">Privacy policy</Link>
       </div>
