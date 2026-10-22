@@ -15,3 +15,6 @@
 - listing_contacts.email is set by DB triggers from the owner's account email; client code must never write it.
 - App tables store user_id as plain uuid (no FK to auth.users); account deletion cleanup is done by a trigger.
 - Auth is email and password (signUp / signInWithPassword), no magic links; protected pages live under src/routes/_authenticated/.
+- Listing management reads use authenticated server functions and Query-backed protected loaders so private and hidden owner rows remain accessible.
+- Moderation validates the confirmed account email server-side against the config allowlist before loading the privileged client; browser checks only control navigation visibility.
+- Database triggers enforce listing quotas with per-owner transaction locks and a private durable posting ledger, preventing concurrent posts and deletion from bypassing daily limits. Daily boundaries use Europe/Dublin.
