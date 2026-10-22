@@ -11,6 +11,7 @@ import { getOwnListings, updateOwnListing } from "@/lib/management.functions";
 import { ListingStatus } from "@/components/ListingStatus";
 import { ConfirmListingDelete } from "@/components/ConfirmListingDelete";
 import { ManagementLoading, ManagementError, ManagementNotFound } from "@/components/ManagementStates";
+import { BackLink } from "@/components/BackLink";
 
 const ownListingsQuery = queryOptions({ queryKey: ["my-listings"], queryFn: () => getOwnListings() });
 
@@ -50,6 +51,7 @@ function MyListings() {
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10">
+      <BackLink to="/" label="Back to listings" />
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="font-display text-4xl font-bold">My listings</h1>
         <Button asChild><Link to="/listings/new"><Plus className="h-4 w-4" />List an oar</Link></Button>
