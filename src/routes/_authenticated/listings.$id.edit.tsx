@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ListingForm, EMPTY_LISTING, type ListingFormValues } from "@/components/ListingForm";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { BackLink } from "@/components/BackLink";
 
 export const Route = createFileRoute("/_authenticated/listings/$id/edit")({
   head: () => ({
@@ -42,6 +43,7 @@ function EditListing() {
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10">
+      <BackLink to="/my-listings" label="Back to my listings" />
       <h1 className="mb-8 font-display text-4xl font-bold">Edit listing</h1>
       {isLoading ? <p role="status" className="text-muted-foreground">Loading</p>
         : error ? <div role="alert"><p>{error.message}</p><Button variant="outline" className="mt-4" onClick={() => refetch()}>Try again</Button></div>
