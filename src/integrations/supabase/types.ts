@@ -40,6 +40,24 @@ export type Database = {
           },
         ]
       }
+      listing_post_log: {
+        Row: {
+          id: string
+          posted_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          posted_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          posted_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       listings: {
         Row: {
           blade_type: string | null
@@ -56,6 +74,7 @@ export type Database = {
           image_url: string | null
           length: string | null
           listing_type: string
+          moderation_previous_status: string | null
           notes: string | null
           offer_type: string | null
           pickup_event: string | null
@@ -83,6 +102,7 @@ export type Database = {
           image_url?: string | null
           length?: string | null
           listing_type: string
+          moderation_previous_status?: string | null
           notes?: string | null
           offer_type?: string | null
           pickup_event?: string | null
@@ -110,6 +130,7 @@ export type Database = {
           image_url?: string | null
           length?: string | null
           listing_type?: string
+          moderation_previous_status?: string | null
           notes?: string | null
           offer_type?: string | null
           pickup_event?: string | null

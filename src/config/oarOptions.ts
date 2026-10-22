@@ -83,6 +83,13 @@ export const LISTING_STATUSES = ["active", "matched", "archived", "hidden"] as c
 
 export const LISTING_DAYS = 60;
 
+export const MAX_ACTIVE_LISTINGS = 20;
+export const MAX_DAILY_LISTINGS = 10;
+export const EXPIRY_WARNING_DAYS = 7;
+
+// Admin access is checked against the verified account email on the server.
+export const ADMIN_EMAILS: readonly string[] = ["totmarko1@yahoo.com"];
+
 export const COUNTIES = [
   "Antrim", "Armagh", "Carlow", "Cavan", "Clare", "Cork", "Derry", "Donegal",
   "Down", "Dublin", "Fermanagh", "Galway", "Kerry", "Kildare", "Kilkenny", "Laois",

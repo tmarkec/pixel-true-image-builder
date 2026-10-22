@@ -8,6 +8,8 @@ export const Route = createFileRoute("/login")({
       { name: "description", content: "Log in to OarExchange Ireland with your email and password." },
       { property: "og:title", content: "Log in | OarExchange Ireland" },
       { property: "og:description", content: "Log in with your email and password." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (

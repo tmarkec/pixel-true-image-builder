@@ -12,14 +12,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { OarIcon } from "./OarIcon";
+import { useQueryClient } from "@tanstack/react-query";
+import { ADMIN_EMAILS } from "@/config/oarOptions";
+import { isAdminEmail } from "@/lib/listing-management";
 
 export function SiteHeader() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   async function logOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
     await supabase.auth.signOut();
-    navigate({ to: "/" });
+    navigate({ to: "/login", replace: true });
   }
 
   return (
@@ -29,7 +35,7 @@ export function SiteHeader() {
           <span className="flex h-9 w-9 items-center justify-center rounded-md bg-navy text-navy-foreground">
             <OarIcon className="h-5 w-5" />
           </span>
-          <span className="font-display text-xl font-bold uppercase tracking-wide">
+          <span className="font-display text-base font-bold uppercase sm:text-xl">
             OarExchange <span className="text-primary">Ireland</span>
           </span>
         </Link>
@@ -39,7 +45,7 @@ export function SiteHeader() {
             <>
               <Button asChild size="sm">
                 <Link to="/listings/new">
-                  <Plus className="h-4 w-4" /> List an oar
+                  <Plus className="h-4 w-4 shrink-0" /><span className="hidden sm:inline">List an oar</span><span className="sm:hidden">List</span>
                 </Link>
               </Button>
               <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
@@ -59,13 +65,14 @@ export function SiteHeader() {
                   <DropdownMenuItem asChild className="sm:hidden">
                     <Link to="/my-listings">My listings</Link>
                   </DropdownMenuItem>
+                  {isAdminEmail(user.email, ADMIN_EMAILS) && <DropdownMenuItem asChild><Link to="/moderation">Reported listings</Link></DropdownMenuItem>}
                   <DropdownMenuItem onSelect={logOut}>Log out</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
           ) : (
             <>
-              <Button asChild variant="ghost" size="sm">
+              <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
                 <Link to="/about">About</Link>
               </Button>
               <Button asChild variant="outline" size="sm">

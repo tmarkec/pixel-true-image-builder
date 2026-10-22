@@ -67,7 +67,9 @@ async function compressImage(file: File): Promise<Blob> {
   const canvas = document.createElement("canvas");
   canvas.width = Math.round(bmp.width * scale);
   canvas.height = Math.round(bmp.height * scale);
-  canvas.getContext("2d")!.drawImage(bmp, 0, 0, canvas.width, canvas.height);
+  const drawingContext = canvas.getContext("2d");
+  if (!drawingContext) throw new Error("Could not process photo");
+  drawingContext.drawImage(bmp, 0, 0, canvas.width, canvas.height);
   return new Promise((res, rej) => canvas.toBlob((b) => (b ? res(b) : rej(new Error("Could not process photo"))), "image/jpeg", 0.82));
 }
 
@@ -173,7 +175,8 @@ export function ListingForm({ initial, listingId }: { initial?: ListingFormValue
         id = data.id;
       }
       // Email is added by the database. Only the phone is written here.
-      const { error: pErr } = await supabase.from("listing_contacts").update({ phone: opt(v.phone) }).eq("listing_id", id!);
+      if (!id) throw new Error("The listing could not be saved. Try again.");
+      const { error: pErr } = await supabase.from("listing_contacts").update({ phone: opt(v.phone) }).eq("listing_id", id);
       if (pErr) throw new Error(pErr.message);
 
       await qc.invalidateQueries();

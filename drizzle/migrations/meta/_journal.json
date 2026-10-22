@@ -15,6 +15,13 @@
       "when": 1792613530389,
       "tag": "0001_sample_listings",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792683813450,
+      "tag": "0002_listing_management_limits",
+      "breakpoints": true
     }
   ]
 }

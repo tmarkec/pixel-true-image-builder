@@ -7,6 +7,8 @@ export const Route = createFileRoute("/privacy")({
       { name: "description", content: "How OarExchange Ireland stores and shows your details." },
       { property: "og:title", content: "Privacy policy | OarExchange Ireland" },
       { property: "og:description", content: "How we store and show your details." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (
