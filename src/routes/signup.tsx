@@ -8,6 +8,8 @@ export const Route = createFileRoute("/signup")({
       { name: "description", content: "Sign up to list spare oars or find the ones your club is missing." },
       { property: "og:title", content: "Sign up | OarExchange Ireland" },
       { property: "og:description", content: "Sign up to list spare oars or find missing ones." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (

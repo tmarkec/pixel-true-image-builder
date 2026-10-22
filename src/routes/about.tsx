@@ -7,6 +7,8 @@ export const Route = createFileRoute("/about")({
       { name: "description", content: "A free noticeboard for Irish rowing clubs, schools and rowers to swap spare oars." },
       { property: "og:title", content: "About OarExchange Ireland" },
       { property: "og:description", content: "A free noticeboard for spare and missing oars in Ireland." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (
