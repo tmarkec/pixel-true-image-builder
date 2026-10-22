@@ -2,8 +2,8 @@ import { createClient } from "@supabase/supabase-js";
 import { describe, expect, it } from "vitest";
 
 // Run against disposable, randomly owned rows only; never touches a real user's listings.
-const url = process.env.SUPABASE_URL;
-const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const url = process.env['SUPABASE_URL'];
+const key = process.env['SUPABASE_SERVICE_ROLE_KEY'];
 const db = url && key ? createClient(url, key, {
   auth: { persistSession: false },
   global: { fetch: (input, init) => {
