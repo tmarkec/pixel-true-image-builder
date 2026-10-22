@@ -15,6 +15,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as AuthenticatedModerationRouteImport } from './routes/_authenticated/moderation'
 import { Route as AuthenticatedMyListingsRouteImport } from './routes/_authenticated/my-listings'
 import { Route as ListingsIdRouteImport } from './routes/listings.$id'
 import { Route as AuthenticatedListingsNewRouteImport } from './routes/_authenticated/listings.new'
@@ -49,6 +50,11 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedModerationRoute = AuthenticatedModerationRouteImport.update({
+  id: '/moderation',
+  path: '/moderation',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedMyListingsRoute = AuthenticatedMyListingsRouteImport.update({
   id: '/my-listings',
   path: '/my-listings',
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/signup': typeof SignupRoute
+  '/moderation': typeof AuthenticatedModerationRoute
   '/my-listings': typeof AuthenticatedMyListingsRoute
   '/listings/$id': typeof ListingsIdRoute
   '/listings/new': typeof AuthenticatedListingsNewRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/signup': typeof SignupRoute
+  '/moderation': typeof AuthenticatedModerationRoute
   '/my-listings': typeof AuthenticatedMyListingsRoute
   '/listings/$id': typeof ListingsIdRoute
   '/listings/new': typeof AuthenticatedListingsNewRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/signup': typeof SignupRoute
+  '/_authenticated/moderation': typeof AuthenticatedModerationRoute
   '/_authenticated/my-listings': typeof AuthenticatedMyListingsRoute
   '/listings/$id': typeof ListingsIdRoute
   '/_authenticated/listings/new': typeof AuthenticatedListingsNewRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy'
     | '/signup'
+    | '/moderation'
     | '/my-listings'
     | '/listings/$id'
     | '/listings/new'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy'
     | '/signup'
+    | '/moderation'
     | '/my-listings'
     | '/listings/$id'
     | '/listings/new'
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy'
     | '/signup'
+    | '/_authenticated/moderation'
     | '/_authenticated/my-listings'
     | '/listings/$id'
     | '/_authenticated/listings/new'
@@ -198,6 +210,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/moderation': {
+      id: '/_authenticated/moderation'
+      path: '/moderation'
+      fullPath: '/moderation'
+      preLoaderRoute: typeof AuthenticatedModerationRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/my-listings': {
       id: '/_authenticated/my-listings'
       path: '/my-listings'
@@ -230,12 +249,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedModerationRoute: typeof AuthenticatedModerationRoute
   AuthenticatedMyListingsRoute: typeof AuthenticatedMyListingsRoute
   AuthenticatedListingsNewRoute: typeof AuthenticatedListingsNewRoute
   AuthenticatedListingsIdEditRoute: typeof AuthenticatedListingsIdEditRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedModerationRoute: AuthenticatedModerationRoute,
   AuthenticatedMyListingsRoute: AuthenticatedMyListingsRoute,
   AuthenticatedListingsNewRoute: AuthenticatedListingsNewRoute,
   AuthenticatedListingsIdEditRoute: AuthenticatedListingsIdEditRoute,
