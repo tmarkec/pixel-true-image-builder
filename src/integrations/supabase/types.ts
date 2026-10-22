@@ -43,16 +43,19 @@ export type Database = {
       listing_post_log: {
         Row: {
           id: string
+          listing_id: string | null
           posted_at: string
           user_id: string
         }
         Insert: {
           id?: string
+          listing_id?: string | null
           posted_at?: string
           user_id: string
         }
         Update: {
           id?: string
+          listing_id?: string | null
           posted_at?: string
           user_id?: string
         }
