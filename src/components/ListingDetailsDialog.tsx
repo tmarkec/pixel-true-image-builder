@@ -12,6 +12,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { REPORT_REASONS } from "@/config/oarOptions";
 import { formatDate, sideLabel, type PublicListing } from "@/lib/listings";
 import { cn } from "@/lib/utils";
+import { useServerFn } from "@tanstack/react-start";
+import { moderateListing } from "@/lib/management.functions";
+import { isAdminEmail } from "@/lib/listing-management";
+import { ADMIN_EMAILS } from "@/config/oarOptions";
 
 export function ListingDetailsDialog({ listing, onClose }: { listing: PublicListing | null; onClose: () => void }) {
   return (
@@ -90,7 +94,42 @@ function OarPlaceholder({ brand }: { brand: string }) {
   );
 }
 
+function AdminDelete({ id, onClose }: { id: string; onClose?: (() => void) | undefined }) {
+  const qc = useQueryClient();
+  const router = useRouter();
+  const moderate = useServerFn(moderateListing);
+  const [confirm, setConfirm] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const del = async () => {
+    setBusy(true);
+    try {
+      await moderate({ data: { id, action: "delete" } });
+      toast.success("Listing deleted.");
+      await qc.invalidateQueries();
+      onClose ? onClose() : router.navigate({ to: "/" });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not delete the listing. Try again.");
+    } finally { setBusy(false); }
+  };
+  return (
+    <div className="rounded-xl border border-destructive/40 p-4">
+      <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Admin</div>
+      <div className="mt-3 flex gap-2">
+        {confirm ? (
+          <>
+            <Button size="sm" variant="destructive" disabled={busy} onClick={del}>{busy ? "Deleting..." : "Yes, delete"}</Button>
+            <Button size="sm" variant="ghost" disabled={busy} onClick={() => setConfirm(false)}>Cancel</Button>
+          </>
+        ) : (
+          <Button size="sm" variant="destructive" onClick={() => setConfirm(true)}>Delete listing</Button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function DetailsView({ l, userId, onClose }: { l: PublicListing; userId: string | null; onClose?: (() => void) | undefined }) {
+  const { user } = useAuth();
   const { data: isOwner } = useQuery({
     queryKey: ["listing-owner", l.id, userId],
     enabled: !!userId,
@@ -140,6 +179,7 @@ function DetailsView({ l, userId, onClose }: { l: PublicListing; userId: string 
           <ContactBox l={l} />
         )}
 
+        {userId && isOwner === false && isAdminEmail(user?.email, ADMIN_EMAILS) && <AdminDelete id={l.id} onClose={onClose} />}
         {userId && isOwner === false && <ReportLink listingId={l.id} userId={userId} />}
       </div>
     </>
