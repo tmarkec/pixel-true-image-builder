@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { TypeBadge } from "@/components/TypeBadge";
-import { OarIcon } from "@/components/OarIcon";
+import { OarGraphic } from "@/components/OarGraphic";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -387,7 +387,7 @@ function PreviewCard({ v, photo }: { v: ListingFormValues; photo: string }) {
       {photo ? (
         <img src={photo} alt="" className="aspect-[16/9] w-full object-cover" />
       ) : (
-        <div className="flex aspect-[16/9] items-center justify-center bg-muted text-muted-foreground"><OarIcon className="h-16 w-16" /></div>
+        <div className="flex aspect-[16/9] items-center justify-center overflow-hidden bg-muted text-muted-foreground"><OarGraphic className="h-full w-full opacity-40" /></div>
       )}
       <div className="grid grid-cols-2 gap-2 p-4">
         {rows.length ? rows.map(([k, x]) => (

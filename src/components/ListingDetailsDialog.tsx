@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { TypeBadge } from "@/components/TypeBadge";
+import { OarGraphic } from "@/components/OarGraphic";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { REPORT_REASONS } from "@/config/oarOptions";
@@ -83,13 +84,9 @@ function OarPlaceholder({ brand }: { brand: string }) {
   const theme =
     brand === "Concept2" ? "bg-primary text-primary-foreground" : brand === "Croker" ? "bg-have text-have-foreground" : "bg-navy text-navy-foreground";
   return (
-    <div className={cn("relative flex aspect-[16/7] items-center justify-center overflow-hidden", theme)}>
-      <svg viewBox="0 0 200 60" className="absolute w-[85%] opacity-30" aria-hidden>
-        <rect x="4" y="27" width="140" height="6" rx="3" fill="currentColor" />
-        <rect x="40" y="24" width="10" height="12" rx="2" fill="currentColor" />
-        <path d="M144 22 C170 14 192 18 196 30 C192 42 170 46 144 38 Z" fill="currentColor" />
-      </svg>
-      <span className="relative font-display text-4xl font-bold uppercase tracking-widest">{brand === "Other" ? "Oar" : brand}</span>
+    <div className={cn("relative flex aspect-[16/7] items-start justify-start overflow-hidden", theme)}>
+      <OarGraphic className="absolute inset-0 h-full w-full opacity-30" />
+      <span className="relative m-5 font-display text-xl font-bold uppercase tracking-widest">{brand === "Other" ? "Oar" : brand}</span>
     </div>
   );
 }
