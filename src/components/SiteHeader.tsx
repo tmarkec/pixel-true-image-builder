@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { OarIcon } from "./OarIcon";
+import oarLogo from "@/assets/oar-logo.png";
 import { useQueryClient } from "@tanstack/react-query";
 import { ADMIN_EMAILS } from "@/config/oarOptions";
 import { isAdminEmail } from "@/lib/listing-management";
@@ -32,9 +32,7 @@ export function SiteHeader() {
     <header className="border-b-2 border-foreground bg-background">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
         <Link to="/" className="flex items-center gap-2 text-foreground">
-          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-navy text-navy-foreground">
-            <OarIcon className="h-5 w-5" />
-          </span>
+          <img src={oarLogo} alt="" width={36} height={36} className="h-9 w-9 object-contain" />
           <span className="font-display text-base font-bold uppercase sm:text-xl">
             OarExchange <span className="text-primary">Ireland</span>
           </span>
@@ -72,6 +70,7 @@ export function SiteHeader() {
                     <Link to="/my-listings">My listings</Link>
                   </DropdownMenuItem>
                   {isAdminEmail(user.email, ADMIN_EMAILS) && <DropdownMenuItem asChild><Link to="/moderation">Reported listings</Link></DropdownMenuItem>}
+                  {isAdminEmail(user.email, ADMIN_EMAILS) && <DropdownMenuItem asChild><Link to="/messages">Messages</Link></DropdownMenuItem>}
                   <DropdownMenuItem onSelect={logOut}>Log out</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -102,6 +101,7 @@ export function SiteFooter() {
         <span>OarExchange Ireland is free to use.</span>
         <Link to="/" className="hover:text-foreground">Browse oars</Link>
         <Link to="/about" className="hover:text-foreground">About</Link>
+        <Link to="/contact" className="hover:text-foreground">Contact</Link>
         <Link to="/privacy" className="hover:text-foreground">Privacy policy</Link>
       </div>
     </footer>

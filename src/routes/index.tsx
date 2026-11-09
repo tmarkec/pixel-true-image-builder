@@ -20,10 +20,10 @@ export const Route = createFileRoute("/")({
   loader: ({ context, deps }) => context.queryClient.ensureQueryData(listingsQuery(deps)),
   head: () => ({
     meta: [
-      { title: "OarExchange Ireland | Spare and missing oars" },
-      { name: "description", content: "A free noticeboard for Irish rowers and clubs to swap, give away or find odd oars." },
-      { property: "og:title", content: "OarExchange Ireland" },
-      { property: "og:description", content: "Spare oar? Missing oar? Find the other half." },
+      { title: "OarExchange Ireland | Buy, sell and swap rowing oars" },
+      { name: "description", content: "Buy, sell, swap or give away spare and missing rowing oars between Irish clubs and rowers. Free to use." },
+      { property: "og:title", content: "OarExchange Ireland | Buy, sell and swap rowing oars" },
+      { property: "og:description", content: "A free noticeboard for Irish rowing clubs and rowers to buy, sell and swap odd oars." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -53,7 +53,7 @@ function Index() {
             Spare oar? Missing oar? Find the other half.
           </h1>
           <p className="mt-4 max-w-xl text-lg text-muted-foreground">
-            A free noticeboard for Irish rowers and clubs to swap, give away or find odd oars.
+            A free noticeboard where Irish rowers and clubs buy, sell, swap and give away odd oars.
           </p>
         </div>
       </section>

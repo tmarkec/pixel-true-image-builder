@@ -29,6 +29,13 @@
       "when": 1792684038511,
       "tag": "0003_backfill_posting_ledger",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794247411971,
+      "tag": "0004_contact_messages",
+      "breakpoints": true
     }
   ]
 }
