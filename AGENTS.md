@@ -21,3 +21,4 @@
 - Contact submission requires authenticated middleware and a confirmed account email checked before privileged writes; use that account email for replies to prevent impersonation.
 - The shared listing reminder reads owner listings through the existing authenticated server function, keyed by account identity, so private rows remain private.
 - Empty listing photos use the same bundled sweep-oar line art in details and form previews to avoid inconsistent equipment drawings.
+- Resolve reporter account emails only inside the authorised moderation handler; never expose them through public listing reads or persist them on listings.

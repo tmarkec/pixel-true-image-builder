@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { ADMIN_EMAILS } from "@/config/oarOptions";
 import { isAdminEmail, renewedExpiry } from "@/lib/listing-management";
+import { attachReporterEmails } from "@/lib/reporters";
 
 export const getOwnListings = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -38,10 +39,14 @@ export const getModeration = createServerFn({ method: "GET" })
     if (authError || !user.user?.email_confirmed_at || !isAdminEmail(user.user.email, ADMIN_EMAILS)) throw new Error("This page is only available to admins.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await supabaseAdmin.from("reports")
-      .select("id, reason, created_at, listing_id, listings(id, listing_type, brand, quantity, discipline, side, county, status, expires_at, created_at, notes, image_url)")
+      .select("id, reason, created_at, listing_id, reporter_id, listings(id, listing_type, brand, quantity, discipline, side, county, status, expires_at, created_at, notes, image_url)")
       .order("created_at", { ascending: false });
     if (error) throw new Error("Reported listings could not be loaded. Try again.");
-    return data ?? [];
+    return attachReporterEmails(data ?? [], async (id) => {
+      const { data: account, error: accountError } = await supabaseAdmin.auth.admin.getUserById(id);
+      if (accountError) return null;
+      return account.user?.email ?? null;
+    });
   });
 
 export const moderateListing = createServerFn({ method: "POST" })
