@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Plus, UserRound } from "lucide-react";
+import { Plus, UserRound, Instagram } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -103,6 +103,9 @@ export function SiteFooter() {
         <Link to="/about" className="hover:text-foreground">About</Link>
         <Link to="/contact" className="hover:text-foreground">Contact</Link>
         <Link to="/privacy" className="hover:text-foreground">Privacy policy</Link>
+        <Button asChild variant="ghost" size="icon" className="ml-auto" title="Instagram">
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><Instagram className="h-5 w-5" /></a>
+        </Button>
       </div>
     </footer>
   );

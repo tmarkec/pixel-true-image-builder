@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { Toaster } from "@/components/ui/sonner";
+import { ListingReminder } from "@/components/ListingReminder";
 
 function NotFoundComponent() {
   return (
@@ -136,6 +137,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col">
         <SiteHeader />
+        <ListingReminder />
         <main className="flex-1">
           <Outlet />
         </main>

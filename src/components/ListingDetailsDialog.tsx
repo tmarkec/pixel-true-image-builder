@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { TypeBadge } from "@/components/TypeBadge";
-import { OarGraphic } from "@/components/OarGraphic";
+import sweepOarPlaceholder from "@/assets/sweep-oar-placeholder.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { REPORT_REASONS } from "@/config/oarOptions";
@@ -85,8 +85,8 @@ function OarPlaceholder({ brand }: { brand: string }) {
     brand === "Concept2" ? "bg-primary text-primary-foreground" : brand === "Croker" ? "bg-have text-have-foreground" : "bg-navy text-navy-foreground";
   return (
     <div className={cn("relative flex aspect-[16/7] items-start justify-start overflow-hidden", theme)}>
-      <OarGraphic className="absolute inset-0 h-full w-full opacity-30" />
-      <span className="relative m-5 font-display text-xl font-bold uppercase tracking-widest">{brand === "Other" ? "Oar" : brand}</span>
+      <img src={sweepOarPlaceholder} alt="Sweep rowing oar with a flat asymmetric racing blade, shown as a placeholder" width={1536} height={864} loading="lazy" className="aspect-[16/9] w-full object-contain" />
+      <span className={cn("absolute left-3 top-3 rounded px-2 py-1 font-display text-sm font-bold", theme)}>{brand === "Other" ? "Oar" : brand}</span>
     </div>
   );
 }

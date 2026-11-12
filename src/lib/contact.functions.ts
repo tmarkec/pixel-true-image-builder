@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { ADMIN_EMAILS } from "@/config/oarOptions";
 import { isAdminEmail } from "@/lib/listing-management";
+import { confirmedContactEmail } from "@/lib/contact-access";
 
 export const contactSchema = z.object({
   name: z.string().trim().min(1, "Enter your name.").max(100, "Name must be under 100 characters."),
@@ -11,10 +12,14 @@ export const contactSchema = z.object({
 });
 
 export const sendContactMessage = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator(contactSchema)
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    const { data: account, error: authError } = await context.supabase.auth.getUser();
+    if (authError) throw new Error("Log in to send a message.");
+    const email = confirmedContactEmail(account.user);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("contact_messages").insert(data);
+    const { error } = await supabaseAdmin.from("contact_messages").insert({ ...data, email });
     if (error) throw new Error("Your message could not be sent. Try again.");
     return { ok: true };
   });

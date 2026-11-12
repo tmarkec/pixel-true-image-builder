@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { contactSchema, sendContactMessage } from "@/lib/contact.functions";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/contact")({
 });
 
 function Contact() {
+  const { user, loading } = useAuth();
   const send = useServerFn(sendContactMessage);
   const [values, setValues] = useState({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -28,7 +30,7 @@ function Contact() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const parsed = contactSchema.safeParse(values);
+    const parsed = contactSchema.safeParse({ ...values, email: user?.email ?? "" });
     if (!parsed.success) {
       setErrors(Object.fromEntries(parsed.error.issues.map((i) => [String(i.path[0]), i.message])));
       return;
@@ -48,14 +50,19 @@ function Contact() {
     <div className="mx-auto w-full max-w-xl px-4 py-12">
       <h1 className="font-display text-4xl font-bold">Contact</h1>
       <p className="mt-3 text-muted-foreground">Questions, suggestions or a problem with the site. We will reply by email.</p>
-      {status === "sent" ? (
+      {loading ? <p role="status" className="mt-8 text-muted-foreground">Loading</p> : !user ? (
+        <div className="mt-8 border-y py-6">
+          <p>Log in or sign up to send a message to the admin.</p>
+          <div className="mt-4 flex gap-2"><Button asChild><Link to="/login">Log in</Link></Button><Button asChild variant="outline"><Link to="/signup">Sign up</Link></Button></div>
+        </div>
+      ) : status === "sent" ? (
         <p role="status" className="mt-8 rounded-lg border bg-card p-6">Thanks, your message has been sent.</p>
       ) : (
         <form onSubmit={submit} className="mt-8 space-y-4" noValidate>
           {(["name", "email"] as const).map((f) => (
             <div key={f}>
               <label htmlFor={f} className="text-sm font-medium">{f === "name" ? "Name" : "Email"}</label>
-              <Input id={f} type={f === "email" ? "email" : "text"} className="mt-1" value={values[f]} maxLength={f === "name" ? 100 : 255}
+              <Input id={f} type={f === "email" ? "email" : "text"} className="mt-1" value={f === "email" ? user.email ?? "" : values[f]} readOnly={f === "email"} maxLength={f === "name" ? 100 : 255}
                 onChange={(e) => setValues({ ...values, [f]: e.target.value })} />
               {errors[f] && <p className="mt-1 text-sm text-destructive">{errors[f]}</p>}
             </div>

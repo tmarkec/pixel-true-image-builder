@@ -27,7 +27,6 @@ export const Route = createFileRoute("/about")({
         There are no fees and we don't handle payments. Any deal is between you and the other club or
         rower.
       </p>
-      <p className="text-sm text-muted-foreground">This page is placeholder text and will be updated.</p>
     </article>
   ),
 });
