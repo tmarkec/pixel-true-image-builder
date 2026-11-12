@@ -1,8 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { ADMIN_EMAILS } from "@/config/oarOptions";
-import { isAdminEmail, renewedExpiry } from "@/lib/listing-management";
+import { renewedExpiry } from "@/lib/listing-management";
+import { assertAdmin } from "@/lib/admin-access";
 import { attachReporterEmails } from "@/lib/reporters";
 
 export const getOwnListings = createServerFn({ method: "GET" })
@@ -35,8 +35,7 @@ export const updateOwnListing = createServerFn({ method: "POST" })
 export const getModeration = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data: user, error: authError } = await context.supabase.auth.getUser();
-    if (authError || !user.user?.email_confirmed_at || !isAdminEmail(user.user.email, ADMIN_EMAILS)) throw new Error("This page is only available to admins.");
+    await assertAdmin(context.supabase);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await supabaseAdmin.from("reports")
       .select("id, reason, created_at, listing_id, reporter_id, listings(id, listing_type, brand, quantity, discipline, side, county, status, expires_at, created_at, notes, image_url)")
@@ -53,8 +52,7 @@ export const moderateListing = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator(z.object({ id: z.string().uuid(), action: z.enum(["hide", "restore", "delete"]) }))
   .handler(async ({ context, data }) => {
-    const { data: user, error: authError } = await context.supabase.auth.getUser();
-    if (authError || !user.user?.email_confirmed_at || !isAdminEmail(user.user.email, ADMIN_EMAILS)) throw new Error("Only an admin can change reported listings.");
+    await assertAdmin(context.supabase);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: listing, error: readError } = await supabaseAdmin.from("listings")
       .select("status, moderation_previous_status").eq("id", data.id).maybeSingle();

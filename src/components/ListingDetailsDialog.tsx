@@ -15,8 +15,7 @@ import { formatDate, sideLabel, type PublicListing } from "@/lib/listings";
 import { cn } from "@/lib/utils";
 import { useServerFn } from "@tanstack/react-start";
 import { moderateListing } from "@/lib/management.functions";
-import { isAdminEmail } from "@/lib/listing-management";
-import { ADMIN_EMAILS } from "@/config/oarOptions";
+import { useAdmin } from "@/hooks/useAdmin";
 
 export function ListingDetailsDialog({ listing, onClose }: { listing: PublicListing | null; onClose: () => void }) {
   return (
@@ -126,7 +125,7 @@ function AdminDelete({ id, onClose }: { id: string; onClose?: (() => void) | und
 }
 
 function DetailsView({ l, userId, onClose }: { l: PublicListing; userId: string | null; onClose?: (() => void) | undefined }) {
-  const { user } = useAuth();
+  const isAdmin = useAdmin();
   const { data: isOwner } = useQuery({
     queryKey: ["listing-owner", l.id, userId],
     enabled: !!userId,
@@ -176,7 +175,7 @@ function DetailsView({ l, userId, onClose }: { l: PublicListing; userId: string 
           <ContactBox l={l} />
         )}
 
-        {userId && isOwner === false && isAdminEmail(user?.email, ADMIN_EMAILS) && <AdminDelete id={l.id} onClose={onClose} />}
+        {userId && isOwner === false && isAdmin && <AdminDelete id={l.id} onClose={onClose} />}
         {userId && isOwner === false && <ReportLink listingId={l.id} userId={userId} />}
       </div>
     </>
@@ -269,7 +268,7 @@ function ReportLink({ listingId, userId }: { listingId: string; userId: string }
     const text = detail.trim() ? `${reason}: ${detail.trim().slice(0, 500)}` : reason;
     const { error } = await supabase.from("reports").insert({ listing_id: listingId, reporter_id: userId, reason: text });
     setBusy(false);
-    if (error) { toast.error("Could not send the report. Try again."); return; }
+    if (error) { toast.error(error.code === "23505" ? "You have already reported this listing." : "Could not send the report. Try again."); return; }
     setSent(true);
   };
 

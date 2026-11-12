@@ -1,8 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { ADMIN_EMAILS } from "@/config/oarOptions";
-import { isAdminEmail } from "@/lib/listing-management";
+import { assertAdmin } from "@/lib/admin-access";
 import { confirmedContactEmail } from "@/lib/contact-access";
 
 export const contactSchema = z.object({
@@ -24,15 +23,10 @@ export const sendContactMessage = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-async function assertAdmin(supabase: { auth: { getUser: () => Promise<{ data: { user: { email?: string | null; email_confirmed_at?: string | null } | null }; error: unknown }> } }) {
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data.user?.email_confirmed_at || !isAdminEmail(data.user.email ?? undefined, ADMIN_EMAILS)) throw new Error("This page is only available to admins.");
-}
-
 export const getContactMessages = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    await assertAdmin(context.supabase as never);
+    await assertAdmin(context.supabase);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await supabaseAdmin.from("contact_messages").select("*").order("created_at", { ascending: false });
     if (error) throw new Error("Messages could not be loaded. Try again.");
@@ -43,7 +37,7 @@ export const deleteContactMessage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator(z.object({ id: z.string().uuid() }))
   .handler(async ({ context, data }) => {
-    await assertAdmin(context.supabase as never);
+    await assertAdmin(context.supabase);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.from("contact_messages").delete().eq("id", data.id);
     if (error) throw new Error("The message could not be deleted.");

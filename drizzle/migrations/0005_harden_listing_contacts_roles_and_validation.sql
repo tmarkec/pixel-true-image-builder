@@ -1,0 +1,18 @@
+CREATE TYPE public.app_role AS ENUM ('admin', 'moderator', 'user');
+CREATE TABLE public.user_roles (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE, role public.app_role NOT NULL, UNIQUE(user_id, role));
+GRANT SELECT ON public.user_roles TO authenticated;
+GRANT ALL ON public.user_roles TO service_role;
+ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users read own roles" ON public.user_roles FOR SELECT TO authenticated USING (user_id = auth.uid());
+CREATE OR REPLACE FUNCTION public.has_role(_user_id uuid, _role public.app_role) RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public AS $$ SELECT EXISTS (SELECT 1 FROM public.user_roles WHERE user_id = _user_id AND role = _role) $$;
+REVOKE ALL ON FUNCTION public.has_role(uuid, public.app_role) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.has_role(uuid, public.app_role) TO authenticated, service_role;
+INSERT INTO public.user_roles(user_id, role) SELECT id, 'admin'::public.app_role FROM auth.users WHERE id = 'c355cb0a-63ba-4fba-b1c2-b0b847c3fa6e' ON CONFLICT DO NOTHING;
+DROP POLICY "Logged-in users view contacts" ON public.listing_contacts;
+CREATE POLICY "Members read active contacts or own contacts" ON public.listing_contacts FOR SELECT TO authenticated USING (EXISTS (SELECT 1 FROM public.listings l WHERE l.id = listing_contacts.listing_id AND (l.user_id = auth.uid() OR (l.status = 'active' AND l.expires_at > now()))));
+DROP POLICY "Public read oar photos" ON storage.objects;
+ALTER TABLE public.listings ADD CONSTRAINT listings_own_photo_url_check CHECK (image_url IS NULL OR image_url ~ '^https://nzufxdjdmxbbamwimcrz[.]supabase[.]co/storage/v1/object/public/oar-photos/[0-9a-f-]{36}/[A-Za-z0-9_-]+[.](jpg|jpeg|png)$');
+ALTER TABLE public.listings ADD CONSTRAINT listings_notes_length_check CHECK (char_length(notes) <= 1000), ADD CONSTRAINT listings_club_name_length_check CHECK (char_length(club_name) <= 120), ADD CONSTRAINT listings_pickup_event_length_check CHECK (char_length(pickup_event) <= 200), ADD CONSTRAINT listings_length_length_check CHECK (char_length(length) <= 40);
+ALTER TABLE public.listing_contacts ADD CONSTRAINT listing_contacts_phone_check CHECK (phone IS NULL OR (char_length(phone) <= 20 AND phone ~ '^[+0-9][0-9 ()-]{6,19}$'));
+ALTER TABLE public.reports ADD CONSTRAINT reports_one_per_member_listing UNIQUE (listing_id, reporter_id);
+ALTER TABLE public.contact_messages ADD CONSTRAINT contact_messages_name_length_check CHECK (char_length(btrim(name)) BETWEEN 1 AND 100), ADD CONSTRAINT contact_messages_message_length_check CHECK (char_length(btrim(message)) BETWEEN 1 AND 2000), ADD CONSTRAINT contact_messages_email_length_check CHECK (char_length(email) BETWEEN 3 AND 255);

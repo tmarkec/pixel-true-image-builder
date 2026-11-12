@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import oarLogo from "@/assets/oar-logo.png";
 import { useQueryClient } from "@tanstack/react-query";
-import { ADMIN_EMAILS } from "@/config/oarOptions";
-import { isAdminEmail } from "@/lib/listing-management";
+import { useAdmin } from "@/hooks/useAdmin";
 
 export function SiteHeader() {
   const { user, loading } = useAuth();
+  const isAdmin = useAdmin();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -69,8 +69,8 @@ export function SiteHeader() {
                   <DropdownMenuItem asChild className="sm:hidden">
                     <Link to="/my-listings">My listings</Link>
                   </DropdownMenuItem>
-                  {isAdminEmail(user.email, ADMIN_EMAILS) && <DropdownMenuItem asChild><Link to="/moderation">Reported listings</Link></DropdownMenuItem>}
-                  {isAdminEmail(user.email, ADMIN_EMAILS) && <DropdownMenuItem asChild><Link to="/messages">Messages</Link></DropdownMenuItem>}
+                  {isAdmin && <DropdownMenuItem asChild><Link to="/moderation">Reported listings</Link></DropdownMenuItem>}
+                  {isAdmin && <DropdownMenuItem asChild><Link to="/messages">Messages</Link></DropdownMenuItem>}
                   <DropdownMenuItem onSelect={logOut}>Log out</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

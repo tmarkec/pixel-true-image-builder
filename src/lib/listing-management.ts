@@ -9,7 +9,3 @@ export function listingState(status: string, expiresAt: string, now = Date.now()
 export function renewedExpiry(now = Date.now()) {
   return new Date(now + LISTING_DAYS * 86400000).toISOString();
 }
-
-export function isAdminEmail(email: string | undefined, allowed: readonly string[]) {
-  return !!email && allowed.some((value) => value.toLowerCase() === email.toLowerCase());
-}

@@ -36,6 +36,13 @@
       "when": 1794247411971,
       "tag": "0004_contact_messages",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794513593552,
+      "tag": "0005_harden_listing_contacts_roles_and_validation",
+      "breakpoints": true
     }
   ]
 }

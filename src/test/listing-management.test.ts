@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { ADMIN_EMAILS, MAX_ACTIVE_LISTINGS, MAX_DAILY_LISTINGS } from "@/config/oarOptions";
-import { isAdminEmail, listingState, renewedExpiry } from "@/lib/listing-management";
+import { MAX_ACTIVE_LISTINGS, MAX_DAILY_LISTINGS } from "@/config/oarOptions";
+import { listingState, renewedExpiry } from "@/lib/listing-management";
 
 const now = Date.parse("2026-10-22T15:00:00Z");
 describe("Listing management rules", () => {
@@ -16,11 +16,6 @@ describe("Listing management rules", () => {
   });
   it("keeps hidden listings hidden even after expiry", () => {
     expect(listingState("hidden", new Date(now - 1).toISOString(), now).label).toBe("Hidden");
-  });
-  it("allows only the configured admin email", () => {
-    expect(isAdminEmail("totmarko1@yahoo.com", ADMIN_EMAILS)).toBe(true);
-    expect(isAdminEmail("someone@example.org", ADMIN_EMAILS)).toBe(false);
-    expect(isAdminEmail(undefined, ADMIN_EMAILS)).toBe(false);
   });
   it("sets the active listing limit to 20", () => expect(MAX_ACTIVE_LISTINGS).toBe(20));
   it("sets the daily posting limit to 10", () => expect(MAX_DAILY_LISTINGS).toBe(10));
