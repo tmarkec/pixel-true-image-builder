@@ -20,4 +20,4 @@
 - Database triggers enforce listing quotas with per-owner transaction locks and a private durable posting ledger, preventing concurrent posts and deletion from bypassing daily limits. Daily boundaries use Europe/Dublin.
 - Contact submission requires authenticated middleware and a confirmed account email checked before privileged writes; use that account email for replies to prevent impersonation.
 - The shared listing reminder reads owner listings through the existing authenticated server function, keyed by account identity, so private rows remain private.
-- Empty listing photos use the same bundled sweep-oar photograph in details and form previews to avoid inconsistent equipment drawings.
+- Empty listing photos use the same bundled sweep-oar line art in details and form previews to avoid inconsistent equipment drawings.

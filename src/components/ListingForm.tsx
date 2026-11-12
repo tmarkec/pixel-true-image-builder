@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { TypeBadge } from "@/components/TypeBadge";
-import sweepOarPlaceholder from "@/assets/sweep-oar-placeholder.jpg";
+import sweepOarPlaceholder from "@/assets/sweep-oar-line-art.png";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -387,7 +387,7 @@ function PreviewCard({ v, photo }: { v: ListingFormValues; photo: string }) {
       {photo ? (
         <img src={photo} alt="" className="aspect-[16/9] w-full object-cover" />
       ) : (
-        <img src={sweepOarPlaceholder} alt="Sweep rowing oar with a flat asymmetric racing blade, shown as a placeholder" width={1536} height={864} loading="lazy" className="aspect-[16/9] w-full object-contain" />
+        <img src={sweepOarPlaceholder} alt="Line drawing of a sweep rowing oar with a flat asymmetric blade" width={1536} height={864} loading="lazy" className="aspect-[16/9] w-full bg-muted object-contain p-4" />
       )}
       <div className="grid grid-cols-2 gap-2 p-4">
         {rows.length ? rows.map(([k, x]) => (
